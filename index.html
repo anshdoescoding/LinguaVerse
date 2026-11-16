@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinguaVerse — Universal Multilingual Language Partner</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-layout">
+        <!-- Top App Navigation Header -->
+        <header class="app-header">
+            <div class="brand">
+                <div class="brand-logo">
+                    <img src="/static/assets/linguaverse-mark.png" alt="LinguaVerse logo">
+                </div>
+                <div class="brand-titles">
+                    <h1>LinguaVerse</h1>
+                    <span class="brand-sub">Universal Language Partner</span>
+                </div>
+            </div>
+
+            <!-- Controls: Country Language & Voice Mode Toggle -->
+            <div class="header-controls">
+                <!-- Country Language Selector -->
+                <div class="control-group">
+                    <label for="languageSelect">Learning Language:</label>
+                    <div class="select-wrapper">
+                        <select id="languageSelect" class="lang-select">
+                            <option value="es" selected>🇪🇸 Spanish (Español)</option>
+                            <option value="fr">🇫🇷 French (Français)</option>
+                            <option value="de">🇩🇪 German (Deutsch)</option>
+                            <option value="it">🇮🇹 Italian (Italiano)</option>
+                            <option value="pt">🇧🇷 Portuguese (Português)</option>
+                            <option value="ru">🇷🇺 Russian (Русский)</option>
+                            <option value="ja">🇯🇵 Japanese (日本語)</option>
+                            <option value="zh">🇨🇳 Mandarin (中文)</option>
+                            <option value="hi">🇮🇳 Hindi (हिन्दी)</option>
+                            <option value="en">🇬🇧 English (English)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Learner proficiency -->
+                <div class="control-group">
+                    <label for="levelSelect">Level:</label>
+                    <div class="select-wrapper">
+                        <select id="levelSelect" class="lang-select">
+                            <option value="beginner">Beginner</option>
+                            <option value="intermediate" selected>Intermediate</option>
+                            <option value="advanced">Advanced</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Input Mode Toggle -->
+                <div class="mode-toggle-group">
+                    <button class="mode-btn active" id="btnModeText" data-mode="text">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        <span>Text Mode</span>
+                    </button>
+                    <button class="mode-btn" id="btnModeVoice" data-mode="voice">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+                        <span>Voice Mode</span>
+                    </button>
+                </div>
+
+                <div class="account-area" id="accountArea"><button class="btn btn-google" id="btnGoogleLogin" type="button"><span class="google-g">G</span> Continue with Google</button><div class="account-user" id="accountUser" hidden><img id="accountAvatar" alt=""/><span id="accountName"></span><button class="btn btn-secondary btn-signout" id="btnSignOut" type="button">Sign out</button></div></div>
+                <button class="btn btn-secondary" id="btnPremiumHub">✨ Learning Hub</button>
+                <!-- End Session Button -->
+                <button class="btn btn-danger" id="btnEndSession">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    <span>Stop Conversation</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Body View Container -->
+        <main class="main-workspace">
+            
+            <!-- SCREEN 1: Live Dual-Stream Conversation -->
+            <section class="screen-pane active" id="screen-conversation">
+                <div class="conversation-layout">
+                    <!-- Stream 1: Conversational Chat Panel -->
+                    <div class="chat-column">
+                        <div class="column-header">
+                            <div class="partner-info">
+                                <span class="partner-avatar" id="partnerFlag">🇪🇸</span>
+                                <div>
+                                    <h3 id="partnerName">LinguaPartner (Spanish)</h3>
+                                    <span class="status-online"><span class="pulse-green"></span> Live Partner • Audio Active</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Chat Timeline -->
+                        <div class="chat-timeline" id="chatTimeline">
+                            <div class="chat-bubble partner-bubble">
+                                <div class="bubble-sender">LinguaPartner</div>
+                                <div class="bubble-text" id="initialGreeting">¡Hola! ¿Cómo estás hoy? ¿De qué te gustaría hablar en nuestra sesión?</div>
+                            </div>
+                        </div>
+
+                        <!-- Voice Visualizer Banner (Shown in Voice Mode) -->
+                        <div class="voice-visualizer" id="voiceVisualizer" style="display: none;">
+                            <div class="mic-wave">
+                                <span></span><span></span><span></span><span></span><span></span>
+                            </div>
+                            <span class="voice-status-text" id="voiceStatusText">Listening to your speech... Speak clearly in target language</span>
+                        </div>
+
+                        <!-- Input Bar -->
+                        <div class="chat-input-bar">
+                            <form id="utteranceForm" class="utterance-form">
+                                <button type="button" class="mic-toggle-btn" id="btnMicTrigger" title="Click to Speak">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+                                </button>
+                                <input type="text" id="utteranceInput" placeholder="Type or speak in Spanish (e.g. 'Yo ir a la biblioteca ayer...')" autocomplete="off">
+                                <button type="submit" class="btn btn-primary" id="btnSubmitTurn">
+                                    <span>Send</span>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Stream 2: Real-time RAG Error Sidecard Drawer -->
+                    <aside class="sidecard-column">
+                        <div class="column-header">
+                            <div class="sidecard-title">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                                <h3>Stream 2: Live Error Sidecard</h3>
+                            </div>
+                            <span class="live-pill">Non-Stop Flow</span>
+                        </div>
+
+                        <div class="sidecard-feed" id="sidecardFeed">
+                            <div class="empty-feed-state">
+                                <div class="empty-icon">💡</div>
+                                <h4>Conversation Flows Uninterrupted</h4>
+                                <p>As you speak or type, Stream 2 detects grammar mistakes and displays corrections in real time without stopping your conversation.</p>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+            </section>
+
+            <!-- SCREEN 2: Session Analytics & Error Summary -->
+            <section class="screen-pane" id="screen-summary">
+                <div class="summary-container">
+                    <div class="summary-header-card">
+                        <div class="summary-title-group">
+                            <h2>Conversation Session Summary</h2>
+                            <p>Here is your complete linguistic performance breakdown for this session.</p>
+                        </div>
+                        <button class="btn btn-emerald" id="btnStartQuiz">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                            <span>Take Quiz from Conversation</span>
+                        </button>
+                    </div>
+
+                    <!-- Stat Cards Grid -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <span class="stat-icon">⏱️</span>
+                            <span class="stat-value" id="summaryDuration">02:15</span>
+                            <span class="stat-label">Session Duration</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-icon">💬</span>
+                            <span class="stat-value" id="summaryTurns">0</span>
+                            <span class="stat-label">Conversation Turns</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-icon">⚠️</span>
+                            <span class="stat-value" id="summaryErrors">0</span>
+                            <span class="stat-label">Mistakes Identified</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-icon">🎯</span>
+                            <span class="stat-value" id="summaryAccuracy">100%</span>
+                            <span class="stat-label">Language Accuracy</span>
+                        </div>
+                    </div>
+
+                    <!-- Error Logs Timeline Section -->
+                    <div class="errors-section">
+                        <h3>Session Mistake Breakdown & RAG Rules</h3>
+                        <div class="errors-list" id="summaryErrorsList">
+                            <!-- Dynamic Error Cards -->
+                        </div>
+                    </div>
+
+                    <div class="summary-actions">
+                        <button class="btn btn-secondary" id="btnNewSession">Start New Conversation</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SCREEN 3: Dynamic Session Quiz -->
+            <section class="screen-pane" id="screen-quiz">
+                <div class="quiz-container">
+                    <div class="quiz-header-card">
+                        <div>
+                            <h2>Randomized Session AI Quiz</h2>
+                            <p>Test your knowledge on questions generated strictly from your conversation session!</p>
+                        </div>
+                        <div class="quiz-score-badge" id="quizScoreBadge">Score: 0 / 0</div>
+                    </div>
+
+                    <div class="quiz-questions-list" id="quizQuestionsList">
+                        <!-- Dynamic AI Quiz Question Cards -->
+                    </div>
+
+                    <div class="quiz-footer-actions">
+                        <button class="btn btn-primary" id="btnSubmitQuiz">Submit Quiz Answers</button>
+                        <button class="btn btn-secondary" id="btnBackToSummary">Back to Summary</button>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+
+    <div id="premiumOverlay" class="premium-overlay" aria-hidden="true">
+      <div class="premium-panel">
+        <div class="premium-heading"><div><span class="live-pill">LINGUAVERSE PLUS</span><h2>Learning Hub</h2><p>Your vocabulary, daily progress and speaking practice in one place.</p></div><button class="hub-close" id="btnCloseHub" aria-label="Close">✕</button></div>
+        <div class="hub-tabs"><button class="hub-tab active" data-hub="vocabulary">📚 Vocabulary</button><button class="hub-tab" data-hub="streaks">🔥 Streaks</button><button class="hub-tab" data-hub="pronunciation">🎙️ Pronunciation</button><button class="hub-tab" data-hub="topics">💬 Topics</button></div>
+        <section class="hub-section active" id="hub-vocabulary"><div class="hub-section-head"><div><h3>Vocabulary flashcards</h3><p>Collect useful words from your conversations and revise them.</p></div><button class="btn btn-primary" id="btnExtractWords">Find words from this chat</button></div><div id="vocabSuggestions" class="vocab-suggestions"></div><form id="vocabForm" class="vocab-form"><input id="vocabWord" placeholder="Word or phrase" required><input id="vocabMeaning" placeholder="Meaning in English"><input id="vocabExample" placeholder="Example sentence"><button class="btn btn-primary" type="submit">Save word</button></form><div id="flashcardList" class="flashcard-grid"></div></section>
+        <section class="hub-section" id="hub-streaks"><h3>Your learning streak</h3><div id="streakStats" class="streak-stats"><p>Loading your progress…</p></div><div class="goal-note">🎯 Daily goal: practise for 10 minutes. A practice day is counted when you send a message.</div></section>
+        <section class="hub-section" id="hub-pronunciation"><h3>Pronunciation practice</h3><p>Enter a sentence, listen to it, then record yourself. Your browser's speech recognition compares the recognized words with the target.</p><textarea id="pronunciationTarget" rows="3" placeholder="Enter a sentence in your learning language"></textarea><div class="pronunciation-actions"><button class="btn btn-secondary" id="btnHearTarget">🔊 Listen</button><button class="btn btn-primary" id="btnRecordPronunciation">🎙️ Speak now</button></div><p id="pronunciationStatus" class="hub-status">Your result will appear here.</p><div id="pronunciationResult"></div><small class="hub-disclaimer">This is a speech-recognition text-match estimate, not a professional phonetic or accent assessment. Microphone and language support depend on your browser.</small></section>
+        <section class="hub-section" id="hub-topics"><h3>Conversation topics</h3><p>Choose a topic to start a natural conversation in your selected language.</p><div id="topicGrid" class="topic-grid"></div></section>
+      </div>
+    </div>
+
+    <div id="onboardingOverlay" class="onboarding-overlay">
+      <div class="onboarding-card">
+        <section class="welcome-hero">
+          <div class="welcome-brand-row">
+            <img class="welcome-brand-logo" src="/static/assets/linguaverse-logo.png" alt="LinguaVerse — Universal Language Partner">
+            <div class="welcome-language-art" aria-hidden="true">
+              <div class="welcome-orbit"></div>
+              <div class="welcome-spark">✧</div>
+              <span class="welcome-greeting greeting-es">Hola 👋</span>
+              <span class="welcome-greeting greeting-fr">Bonjour</span>
+              <span class="welcome-greeting greeting-ja">こんにちは</span>
+              <span class="welcome-greeting greeting-hi">नमस्ते</span>
+            </div>
+          </div>
+          <h1>Welcome to <span>LinguaVerse</span></h1>
+          <h2>Your journey to multilingual confidence starts here.</h2>
+          <p>Choose your preferred language and current fluency level to personalise your learning experience.</p>
+        </section>
+
+        <section class="welcome-form">
+          <div class="welcome-field">
+            <label class="welcome-question" for="onboardingLanguage">
+              <span class="welcome-step">1</span>
+              <span>Which language would you like to learn?</span>
+            </label>
+            <div class="welcome-select-wrap">
+              <select id="onboardingLanguage" class="lang-select welcome-language-select">
+                <option value="es">ES&nbsp;&nbsp; Spanish</option>
+                <option value="fr">FR&nbsp;&nbsp; French</option>
+                <option value="de">DE&nbsp;&nbsp; German</option>
+                <option value="it">IT&nbsp;&nbsp; Italian</option>
+                <option value="pt">PT&nbsp;&nbsp; Portuguese</option>
+                <option value="ru">RU&nbsp;&nbsp; Russian</option>
+                <option value="ja">JA&nbsp;&nbsp; Japanese</option>
+                <option value="zh">ZH&nbsp;&nbsp; Mandarin Chinese</option>
+                <option value="hi">HI&nbsp;&nbsp; Hindi</option>
+                <option value="en">EN&nbsp;&nbsp; English</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="welcome-field">
+            <div class="welcome-question">
+              <span class="welcome-step">2</span>
+              <span>What is your current fluency level?</span>
+            </div>
+            <select id="onboardingLevel" class="welcome-level-value" aria-hidden="true" tabindex="-1">
+              <option value="beginner">Beginner</option>
+              <option value="intermediate" selected>Intermediate</option>
+              <option value="advanced">Advanced</option>
+            </select>
+            <div class="welcome-level-grid" role="group" aria-label="Choose your fluency level">
+              <button type="button" class="welcome-level-card" data-level="beginner" aria-pressed="false">
+                <span class="welcome-level-icon">🌱</span>
+                <strong>Beginner</strong>
+                <span class="welcome-level-description">I'm just getting started.</span>
+                <small>LEARN THE BASICS</small>
+              </button>
+              <button type="button" class="welcome-level-card selected" data-level="intermediate" aria-pressed="true">
+                <span class="welcome-level-icon">🌿</span>
+                <span class="welcome-level-check">✓</span>
+                <strong>Intermediate</strong>
+                <span class="welcome-level-description">I know the basics.</span>
+                <small>BUILD CONFIDENCE</small>
+              </button>
+              <button type="button" class="welcome-level-card" data-level="advanced" aria-pressed="false">
+                <span class="welcome-level-icon">🚀</span>
+                <strong>Advanced</strong>
+                <span class="welcome-level-description">I can communicate confidently.</span>
+                <small>REFINE YOUR FLUENCY</small>
+              </button>
+            </div>
+          </div>
+
+          <button id="btnBeginLearning" class="btn btn-primary welcome-start-button" type="button">
+            <span>Start Learning</span><span class="welcome-start-arrow" aria-hidden="true">→</span>
+          </button>
+        </section>
+      </div>
+    </div>
+    <script>
+      // Keep the original onboardingLevel select in sync with the visual level cards,
+      // so the existing app.js onboarding flow continues to work unchanged.
+      document.querySelectorAll('.welcome-level-card').forEach(function(card) {
+        card.addEventListener('click', function() {
+          var levelSelect = document.getElementById('onboardingLevel');
+          if (levelSelect) levelSelect.value = card.dataset.level;
+          document.querySelectorAll('.welcome-level-card').forEach(function(item) {
+            var active = item === card;
+            item.classList.toggle('selected', active);
+            item.setAttribute('aria-pressed', active ? 'true' : 'false');
+          });
+        });
+      });
+    </script>
+
+    <script src="app.js"></script>
+</body>
+</html>
